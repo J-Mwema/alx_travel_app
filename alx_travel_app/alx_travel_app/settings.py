@@ -6,7 +6,7 @@ import environ
 env = environ.Env()
 
 # Build paths inside the project
-BASE_DIR = Path(__file__).resolve().parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 # Explicitly tell django-environ where to find the .env file
 env_file = os.path.join(BASE_DIR, '.env')
@@ -30,7 +30,7 @@ INSTALLED_APPS = [
     'corsheaders',
     'drf_yasg',
     # Local apps
-    'listings',
+    'alx_travel_app.listings',
 ]
 
 MIDDLEWARE = [
