@@ -3,7 +3,7 @@
 [Back to the repository overview](../README.md)
 
 This directory contains the Django command-line entry point and project
-package for the travel listings API.
+package. The `/listings/` route currently returns a placeholder response.
 
 ## Project files
 
@@ -17,13 +17,17 @@ package for the travel listings API.
 
 ## Run
 
-Install dependencies and configure the local MySQL environment using the
-[root setup guide](../README.md#local-setup). From this directory:
+Install dependencies and configure the local environment using the
+[root setup guide](../README.md#local-setup). SQLite is the default database;
+MySQL can be selected with environment variables. Copy the repository's
+`.env.example` to `.env`, then run from this directory:
 
 ```bash
 python3 manage.py migrate
 python3 manage.py runserver
 ```
 
-The listings route currently returns a placeholder response. The repository
-root describes the [implemented scope and available API routes](../README.md).
+The API is available locally at `http://127.0.0.1:8000/listings/`; API
+documentation is available at `/swagger/` and `/redoc/`. There is no live
+deployment at this time. See the [repository overview](../README.md) for
+current scope and setup instructions.

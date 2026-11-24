@@ -8,14 +8,23 @@ env = environ.Env()
 # Build paths inside the project
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
-# Explicitly tell django-environ where to find the .env file
-env_file = os.path.join(BASE_DIR, '.env')
-environ.Env.read_env(env_file)
+# Look for a local environment file in the repository and project directories.
+env_files = (
+    os.path.join(BASE_DIR, '.env'),
+    os.path.join(BASE_DIR, 'alx_travel_app', '.env'),
+)
+for env_file in env_files:
+    if os.path.isfile(env_file):
+        environ.Env.read_env(env_file)
+        break
 
 # Security settings
-SECRET_KEY = env('SECRET_KEY')
+SECRET_KEY = env(
+    'SECRET_KEY',
+    default='django-insecure-local-development-key-change-before-production',
+)
 DEBUG = env.bool('DEBUG', default=False)
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = env.list('ALLOWED_HOSTS', default=['localhost', '127.0.0.1'])
 
 # Application definition
 INSTALLED_APPS = [
@@ -64,17 +73,26 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'alx_travel_app.wsgi.application'
 
-# Database configuration - MySQL
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': env('DB_NAME'),
-        'USER': env('DB_USER'),
-        'PASSWORD': env('DB_PASSWORD'),
-        'HOST': env('DB_HOST', default='localhost'),
-        'PORT': env('DB_PORT', default='3306'),
+# Database configuration
+DB_ENGINE = env('DB_ENGINE', default='sqlite')
+if DB_ENGINE.lower() == 'sqlite':
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.sqlite3',
+            'NAME': env('DB_NAME', default=str(BASE_DIR / 'db.sqlite3')),
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': env('DB_NAME'),
+            'USER': env('DB_USER'),
+            'PASSWORD': env('DB_PASSWORD'),
+            'HOST': env('DB_HOST', default='localhost'),
+            'PORT': env('DB_PORT', default='3306'),
+        }
+    }
 
 # REST Framework configuration
 REST_FRAMEWORK = {
